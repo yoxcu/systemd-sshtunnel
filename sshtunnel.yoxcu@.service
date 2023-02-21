@@ -1,0 +1,15 @@
+[Unit] 
+Description=sshtunnel@%I SSH Tunnel 
+After=network-online.target ssh.service 
+
+[Service] 
+User=replaceWithCorrespondingUser 
+EnvironmentFile=/etc/default/sshtunnel@%i 
+RestartSec=3 
+Restart=always 
+ExecStartPre=/bin/sh -c 'until ping -q -c1 $(ssh -G -T ${TARGET_HOST} | awk '"'"'{if($1=="hostname") print $2}'"'"' ) 2>&1 >/dev/null && echo "Server reachable!"; do sleep 10; done;'
+ExecStart=/usr/bin/ssh -NT -o "ExitOnForwardFailure=yes" $SSH_OPTIONS ${TARGET_HOST} $FORWARDS $REVERSES 
+TimeoutStopSec=10 
+
+[Install] 
+WantedBy=multi-user.target 
