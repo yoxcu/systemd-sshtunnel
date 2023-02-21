@@ -1,4 +1,4 @@
-# Options for sshtunnel.user@host1.service 
+# Options for sshtunnel@host1.service 
 # Place it at /etc/default 
 
 # Save all your credential/user/port related config in ~/.ssh/config is strongly recommanded 
